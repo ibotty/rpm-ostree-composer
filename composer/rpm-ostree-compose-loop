@@ -1,0 +1,57 @@
+#!/bin/sh
+set -e
+
+CONFIG_REPO=${CONFIG_REPO-https://git.fedorahosted.org/git/fedora-atomic.git}
+CONFIG_BRANCH=${CONFIG_BRANCH-f23}
+CONFIG_FILE=${CONFIG_FILE-fedora-atomic-docker-host.json}
+DELAY=${DELAY-1h}
+
+WORKDIR=${WORKDIR-/home/ostree}
+SERVERDIR=${SERVERDIR-/srv/ostree}
+GPGDIR=${GPGDIR-/secrets}
+PROXY=${PROXY-localhost:8123}
+
+log_failed() {
+    echo $* 
+}
+
+setup_config_repo() {
+    if [ -d $WORKDIR/config ]; then
+        git clone -b $CONFIG_BRANCH $CONFIG_REPO config
+    fi
+}
+
+setup_ostree_repo() {
+    if [ -d $SERVERDIR/repo ]; then
+        ostree --repo=$SERVERDIR/repo init --mode=archive-z2
+    fi
+}
+
+update_config_tree() {
+    pushd config
+    git reset --hard
+    git pull --recurse-submodules
+    git submodule update --init --recursive
+}
+
+ostree_compose() {
+    rpm-ostree compose tree --proxy=$PROXY --repo=$SERVERDIR/repo \
+        || log_failed "rpm-ostree compose failed"
+    if [ -f $GPGDIR/secring.gpg ]; then
+        ostree gpg-sign --repo=$SERVERDIR/repo --gpg-homedir=$GPGDIR
+    fi
+}
+
+main() {
+    cd $WORKDIR
+    setup_config_repo
+    setup_ostree_repo
+
+    while true; do
+        update_config_tree
+        ostree_compose
+        sleep $DELAY
+    done
+}
+
+main

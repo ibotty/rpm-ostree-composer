@@ -10,12 +10,13 @@ RUN dnf --setopt=tsflags=nodocs -y install \
  && dnf clean all \
  && mkdir $SERVERDIR \
  && chmod 0777 $SERVERDIR \
- && useradd ostree -d $WORKDIR -u $MY_UID ostree \
- && cd $WORKDIR \
- && git clone https://github.com/CentOS/sig-atomic-buildscripts
+ && useradd -d $WORKDIR -u $MY_UID ostree \
 
 ADD rpm-ostree-compose-loop /usr/bin/rpm-ostree-compose-loop
 
+USER 1000
+
 VOLUME $WORKDIR
 VOLUME $SERVERDIR
-CMD /usr/bin/rpm-ostree-compose-loop
+
+CMD ["/usr/bin/rpm-ostree-compose-loop"]

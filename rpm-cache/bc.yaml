@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: BuildConfig
+metadata:
+  annotations:
+    openshift.io/generated-by: OpenShiftNewApp
+  creationTimestamp: 2015-11-06T13:08:14Z
+  labels:
+    template: ostree
+  name: ostree-rpm-cache
+  namespace: admin
+  resourceVersion: "2042687"
+  selfLink: /oapi/v1/namespaces/develop/buildconfigs/ostree-rpm-cache
+  uid: 7059ef37-8487-11e5-b099-08606e46fb1b
+spec:
+  output:
+    to:
+      kind: ImageStreamTag
+      name: ostree-rpm-cache:latest
+  resources: {}
+  source:
+    contextDir: rpm-cache
+    git:
+      ref: master
+      uri: https://github.com/ibotty/rpm-ostree-composer.git
+    type: Git
+  strategy:
+    dockerStrategy:
+      from:
+        kind: ImageStreamTag
+        name: fedora:23
+    type: Docker
+  triggers:
+  - github:
+      secret: soUOmpaEY9BdgNXEuukI
+    type: GitHub
+  - generic:
+      secret: ODiKr-F59lrcM-L5IPF3
+    type: Generic
+  - type: ConfigChange
+  - imageChange:
+      lastTriggeredImageID: library/fedora@sha256:a62ed896a44d74436c20b70e351cb2001122618a6097fe669d39f98fc5a49e61
+    type: ImageChange
+status:
+  lastVersion: 3

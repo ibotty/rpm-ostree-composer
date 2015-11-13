@@ -12,4 +12,4 @@ RUN dnf --setopt=tsflags=nodocs -y install \
 
 USER 995
 EXPOSE 8123
-CMD ["/usr/bin/polipo", "diskCacheRoot=/var/cache/polipo", "daemonise=false"]
+CMD ["/usr/bin/polipo", "diskCacheRoot=/var/cache/polipo", "daemonise=false", "logFile=/dev/stderr"]

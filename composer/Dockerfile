@@ -12,11 +12,11 @@ RUN dnf --setopt=tsflags=nodocs -y install \
  && chmod 0777 $SERVERDIR \
  && useradd -d $WORKDIR -u $MY_UID ostree
 
-ADD rpm-ostree-compose-loop /usr/bin/rpm-ostree-compose-loop
+ADD rpm-ostree-compose /usr/bin/rpm-ostree-compose
 
 USER 1000
 
 VOLUME $WORKDIR
 VOLUME $SERVERDIR
 
-CMD ["/usr/bin/rpm-ostree-compose-loop"]
+CMD ["/usr/bin/rpm-ostree-compose"]

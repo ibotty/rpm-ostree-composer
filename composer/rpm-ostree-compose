@@ -42,16 +42,33 @@ ostree_compose() {
     fi
 }
 
+update_and_build() {
+    update_config_tree
+    ostree_compose
+}
+
+loop() {
+    while true; do
+        update_and_build
+        sleep $DELAY
+    done
+}
+
 main() {
     cd $WORKDIR
     setup_config_repo
     setup_ostree_repo
 
-    while true; do
-        update_config_tree
-        ostree_compose
-        sleep $DELAY
-    done
+    if [ $# -ge 1 ]; then
+        if [ $1 = "loop" ]; then
+            loop
+        else
+            echo "Unknown arg: $1" >> /dev/stderr
+            exit 1
+        fi
+    else
+        update_and_build
+    fi
 }
 
 main

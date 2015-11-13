@@ -3,8 +3,9 @@ MAINTAINER tob@butter.sh
 
 RUN dnf --setopt=tsflags=nodocs -y install \
         polipo \
- && test $(id -u polipo) -eq 981 \
  && dnf clean all \
+ && echo polipo id $(id -u polipo) \
+ && test $(id -u polipo) -eq 981 \
  && mkdir -p /var/run/polipo \
  && chmod 0777 /var/run/polipo \
  && chmod 0777 /var/cache/polipo

@@ -28,14 +28,16 @@ setup_ostree_repo() {
 }
 
 update_config_tree() {
-    pushd config
+    pushd $WORKDIR/config
     git reset --hard
     git pull --recurse-submodules
     git submodule update --init --recursive
+    popd
 }
 
 ostree_compose() {
     rpm-ostree compose tree --proxy=$PROXY --repo=$SERVERDIR/repo \
+            $WORKDIR/config/$CONFIG_FILE \
         || log_failed "rpm-ostree compose failed"
     if [ -f $GPGDIR/secring.gpg ]; then
         ostree gpg-sign --repo=$SERVERDIR/repo --gpg-homedir=$GPGDIR

@@ -10,7 +10,7 @@ RUN dnf --setopt=tsflags=nodocs -y install \
  && dnf clean all \
  && mkdir $SERVERDIR \
  && chmod 0777 $SERVERDIR \
- && useradd -d $WORKDIR -u $MY_UID ostree \
+ && useradd -d $WORKDIR -u $MY_UID ostree
 
 ADD rpm-ostree-compose-loop /usr/bin/rpm-ostree-compose-loop
 

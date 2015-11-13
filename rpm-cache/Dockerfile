@@ -10,6 +10,9 @@ RUN dnf --setopt=tsflags=nodocs -y install \
  && chmod 0777 /var/run/polipo \
  && chmod 0777 /var/cache/polipo
 
+ADD entrypoint.sh /
 USER 995
 EXPOSE 8123
-CMD ["/usr/bin/polipo", "diskCacheRoot=/var/cache/polipo", "daemonise=false", "logFile=/dev/stderr"]
+
+#CMD ["/usr/bin/polipo", "diskCacheRoot=/var/cache/polipo", "daemonise=false", "logFile=/dev/stdout"]
+CMD /entrypoint.sh

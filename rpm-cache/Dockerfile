@@ -11,5 +11,5 @@ RUN dnf --setopt=tsflags=nodocs -y install \
  && chmod 0777 /var/cache/polipo
 
 USER 995
-PORT 8123
+EXPOSE 8123
 CMD ["/usr/bin/polipo", "diskCacheRoot=/var/cache/polipo", "daemonise=false"]

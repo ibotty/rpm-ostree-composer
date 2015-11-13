@@ -16,13 +16,13 @@ log_failed() {
 }
 
 setup_config_repo() {
-    if [ -d $WORKDIR/config ]; then
+    if [ ! -d $WORKDIR/config ]; then
         git clone -b $CONFIG_BRANCH $CONFIG_REPO config
     fi
 }
 
 setup_ostree_repo() {
-    if [ -d $SERVERDIR/repo ]; then
+    if [ ! -d $SERVERDIR/repo ]; then
         ostree --repo=$SERVERDIR/repo init --mode=archive-z2
     fi
 }
